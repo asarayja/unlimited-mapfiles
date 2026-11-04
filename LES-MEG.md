@@ -17,4 +17,4 @@
 
 ## Gammelt kart
 Gamle lenker og full kopi: `~/Desktop/unlimited-kart-backup-gammel-2026-11-04/`.
-Testsiden kan også vise det gamle kartet direkte fra CDN-en til sammenligning.
+Unlimited og testsiden bruker bare de nye lagene.

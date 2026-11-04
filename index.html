@@ -28,12 +28,10 @@
   <h2>Grunnkart</h2>
   <label><input type="radio" name="base" value="atlas" checked> Atlas (GTA + Cayo)</label>
   <label><input type="radio" name="base" value="roxwood"> Roxwood (spillkart)</label>
-  <label><input type="radio" name="base" value="old"> Atlas – gammel lenke (CDN)</label>
   <h2>Postkoder</h2>
-  <label><input type="checkbox" id="p2" checked> Ny (postal_02, fra PSD)</label>
+  <label><input type="checkbox" id="p2" checked> GTA</label>
   <label><input type="checkbox" id="prx" checked> Roxwood (bare på Roxwood-kartet)</label>
-  <label><input type="checkbox" id="pold"> Gammel (CDN, postal_01)</label>
-  <small>Ny og gammel postkode samtidig viser forskjellene. Gammel lenke er bare til sammenligning.</small>
+  <small>Roxwood-postkodene vises bare på Roxwood-kartet.</small>
 </div>
 <div id="pos">X –, Y –</div>
 <script src="vendor/leaflet.js"></script>
@@ -47,18 +45,15 @@ const CRS = L.extend({}, L.CRS.Simple, {
   infinite: true,
 });
 const BOUNDS = L.latLngBounds([L.latLng(13000, 8500), L.latLng(-6500, -8800)]);
-const OLD = 'https://cdn.unlimited.wtf/mapfiles';
 const opt = { minZoom: 0, maxZoom: 9, maxNativeZoom: 7, bounds: BOUNDS, tileSize: 256 };
 const map = L.map('map', { crs: CRS, minZoom: 1, maxZoom: 9, zoomControl: true, attributionControl: false, maxBounds: BOUNDS.pad(0.2) }).setView([2000, -500], 3);
 const bases = {
   atlas: L.tileLayer('tiles/atlas_cayo/{z}/{x}/{y}.png', opt),
   roxwood: L.tileLayer('tiles/roxwood/{z}/{x}/{y}.png', opt),
-  old: L.tileLayer(OLD + '/atlas_cayo/{z}/{x}/{y}.png', opt),
 };
 const over = {
   p2: L.tileLayer('tiles/postal_02/{z}/{x}/{y}.png', { ...opt, zIndex: 5 }),
   prx: L.tileLayer('tiles/postal_roxwood/{z}/{x}/{y}.png', { ...opt, zIndex: 6 }),
-  pold: L.tileLayer(OLD + '/postal_01/{z}/{x}/{y}.png', { ...opt, zIndex: 4, opacity: 0.6 }),
 };
 let base = bases.atlas.addTo(map), baseName = 'atlas';
 const syncs = {};
