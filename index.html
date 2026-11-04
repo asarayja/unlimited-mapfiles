@@ -31,7 +31,7 @@
   <label><input type="radio" name="base" value="old"> Atlas – gammel lenke (CDN)</label>
   <h2>Postkoder</h2>
   <label><input type="checkbox" id="p2" checked> Ny (postal_02, fra PSD)</label>
-  <label><input type="checkbox" id="prx" checked> Roxwood</label>
+  <label><input type="checkbox" id="prx" checked> Roxwood (bare på Roxwood-kartet)</label>
   <label><input type="checkbox" id="pold"> Gammel (CDN, postal_01)</label>
   <small>Ny og gammel postkode samtidig viser forskjellene. Gammel lenke er bare til sammenligning.</small>
 </div>
@@ -60,13 +60,21 @@ const over = {
   prx: L.tileLayer('tiles/postal_roxwood/{z}/{x}/{y}.png', { ...opt, zIndex: 6 }),
   pold: L.tileLayer(OLD + '/postal_01/{z}/{x}/{y}.png', { ...opt, zIndex: 4, opacity: 0.6 }),
 };
-let base = bases.atlas.addTo(map);
-document.querySelectorAll('input[name=base]').forEach(r => r.onchange = () => { map.removeLayer(base); base = bases[r.value].addTo(map); });
+let base = bases.atlas.addTo(map), baseName = 'atlas';
+const syncs = {};
 for (const id in over) {
   const cb = document.getElementById(id);
-  const sync = () => cb.checked ? over[id].addTo(map) : map.removeLayer(over[id]);
-  cb.onchange = sync; sync();
+  // Roxwood postal codes only belong on the Roxwood map
+  syncs[id] = () => {
+    const allowed = id !== 'prx' || baseName === 'roxwood';
+    cb.disabled = !allowed; cb.parentElement.style.opacity = allowed ? 1 : .45;
+    (cb.checked && allowed) ? over[id].addTo(map) : map.removeLayer(over[id]);
+  };
+  cb.onchange = syncs[id]; syncs[id]();
 }
+document.querySelectorAll('input[name=base]').forEach(r => r.onchange = () => {
+  map.removeLayer(base); baseName = r.value; base = bases[r.value].addTo(map); syncs.prx();
+});
 const pos = document.getElementById('pos');
 map.on('mousemove', e => { pos.textContent = `X ${e.latlng.lng.toFixed(0)}, Y ${e.latlng.lat.toFixed(0)}`; });
 </script>
