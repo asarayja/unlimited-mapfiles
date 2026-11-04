@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="no">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RedM kart-test</title>
+<link rel="stylesheet" href="vendor/leaflet.css">
+<style>
+  :root { --card:#141b2d; --text:#e2e8f0; --muted:#94a3b8; --border:rgba(255,255,255,.08); }
+  html,body { margin:0; height:100%; background:#0a0e27; color:var(--text); font:14px/1.4 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; }
+  #map { position:absolute; inset:0; background:#d2b790; }
+  .panel { position:absolute; z-index:1000; top:12px; left:12px; background:var(--card); border:1px solid var(--border); border-radius:12px; padding:12px 14px; box-shadow:0 8px 24px rgba(0,0,0,.35); }
+  .panel h1 { font-size:15px; margin:0 0 4px; } .panel h1 b { color:#a5b4fc; }
+  .panel a { color:#a5b4fc; } .panel small { color:var(--muted); }
+  #pos { position:absolute; z-index:1000; bottom:12px; left:12px; background:var(--card); border:1px solid var(--border); border-radius:8px; padding:6px 10px; color:var(--muted); font-variant-numeric:tabular-nums; }
+</style>
+</head>
+<body>
+<div id="map"></div>
+<div class="panel"><h1>RedM <b>kart-test</b></h1><small>RDR2-kartet, zoom 2–7 · <a href="./">GTA / Roxwood</a></small></div>
+<div id="pos">X –, Y –</div>
+<script src="vendor/leaflet.js"></script>
+<script>
+// Same projection as Unlimited (html/src/@core/libs/rdrMap.js)
+const s = 0.01552, ox = 111.29, oy = 63.6
+const CRS = L.extend({}, L.CRS.Simple, { projection: L.Projection.LonLat, scale: z => 2 ** z, zoom: v => Math.log(v) / Math.LN2, transformation: new L.Transformation(s, ox, -s, oy), infinite: true })
+const B = L.latLngBounds([L.latLng(-144 / s + oy / s, -ox / s), L.latLng(oy / s, (176 - ox) / s)])
+const map = L.map('map', { crs: CRS, minZoom: 2, maxZoom: 7, attributionControl: false }).setView([-541, -1501], 3)
+L.tileLayer('tiles/rdr2/{z}/{x}/{y}.jpg', { minZoom: 2, maxZoom: 7, noWrap: true, bounds: B }).addTo(map)
+map.on('mousemove', e => { document.getElementById('pos').textContent = `X ${e.latlng.lng.toFixed(0)}, Y ${e.latlng.lat.toFixed(0)}` })
+</script>
+</body>
+</html>

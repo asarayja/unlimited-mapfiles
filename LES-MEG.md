@@ -9,6 +9,7 @@
     - 770–999: fra map_postals (gammel Roxwood-postkart), 229 koder (820 fantes ikke)
     - 300–591: nye koder for resten av Roxwood (utkast, 292 koder)
 - `tiles/roxwood/`        – Roxwood-spillkartet (fra Extra Map Tiles-ressursen)
+- `tiles/rdr2/`           – RedM-kartet (RDR2, zoom 2–7, jpg). Testside: `rdr2.html`. Kilde: Rockstars kart (s.rsg.sc).
 
 ## Kreditering
 - Atlas og de originale postkodene: den originale utvikleren av Unlimited.
